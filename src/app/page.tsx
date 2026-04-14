@@ -49,7 +49,7 @@ export default async function Home() {
         </h1>
 
         <p className="text-gray-500 text-lg max-w-xl mb-10">
-          Il portale ufficiale per sensei e organizzatori. Gestisci i tuoi atleti,
+          Il portale ufficiale per insegnanti tecnici e organizzatori. Gestisci i tuoi atleti,
           iscrivili agli eventi e segui i tornei — tutto in un unico posto.
         </p>
 
