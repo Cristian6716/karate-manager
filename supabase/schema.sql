@@ -27,7 +27,10 @@ CREATE TABLE public.atleti (
   disciplina TEXT CHECK (disciplina IN ('kata', 'kumite', 'entrambi')),
   email TEXT,
   note TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  tessera_csain TEXT,
+  fijlkam BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  CONSTRAINT almeno_una_tessera CHECK (tessera_csain IS NOT NULL OR fijlkam = TRUE)
 );
 
 -- Tabella eventi

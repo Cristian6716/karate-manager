@@ -45,6 +45,19 @@ import {
   Loader2,
 } from 'lucide-react'
 
+const MESI = [
+  'Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
+  'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre',
+]
+
+const ANNO_CORRENTE = new Date().getFullYear()
+const ANNI = Array.from({ length: 80 }, (_, i) => ANNO_CORRENTE - 4 - i)
+
+function giorniNelMese(mese: string, anno: string) {
+  if (!mese) return 31
+  return new Date(anno ? parseInt(anno) : 2000, parseInt(mese), 0).getDate()
+}
+
 const CINTURA_COLORS: Record<string, string> = {
   'Bianca': 'bg-gray-100 text-gray-800 border border-gray-300',
   'Gialla': 'bg-yellow-100 text-yellow-800',
@@ -70,7 +83,11 @@ const atletaSchema = z.object({
   disciplina: z.enum(['kata', 'kumite', 'entrambi']).optional(),
   email: z.string().email('Email non valida').optional().or(z.literal('')),
   tessera_csain: z.string().optional(),
-})
+  fijlkam: z.boolean().default(false),
+}).refine(
+  d => !!d.tessera_csain?.trim() || d.fijlkam,
+  { message: 'Inserire almeno il numero tessera CSAIN oppure spuntare FIJLKAM', path: ['tessera_csain'] }
+)
 
 type FormData = z.infer<typeof atletaSchema>
 
@@ -98,6 +115,9 @@ export default function AtletiClient({ atletiIniziali }: Props) {
   const [editingAtleta, setEditingAtleta] = useState<Atleta | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [dnGiorno, setDnGiorno] = useState('')
+  const [dnMese, setDnMese] = useState('')
+  const [dnAnno, setDnAnno] = useState('')
 
   const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(atletaSchema),
@@ -115,14 +135,25 @@ export default function AtletiClient({ atletiIniziali }: Props) {
     })
   }, [atleti, search, filterCintura, filterCategoria, filterSesso, filterDisciplina])
 
+  function handleDataNascita(g: string, m: string, a: string) {
+    if (g && m && a) {
+      setValue('data_nascita', `${a}-${m.padStart(2, '0')}-${g.padStart(2, '0')}`, { shouldValidate: true })
+    } else {
+      setValue('data_nascita', '')
+    }
+  }
+
   function openCreate() {
     setEditingAtleta(null)
+    setDnGiorno(''); setDnMese(''); setDnAnno('')
     reset({})
     setDialogOpen(true)
   }
 
   function openEdit(atleta: Atleta) {
     setEditingAtleta(atleta)
+    const [a, m, g] = atleta.data_nascita.split('-')
+    setDnAnno(a); setDnMese(String(parseInt(m))); setDnGiorno(String(parseInt(g)))
     reset({
       nome: atleta.nome,
       cognome: atleta.cognome,
@@ -134,6 +165,7 @@ export default function AtletiClient({ atletiIniziali }: Props) {
       disciplina: atleta.disciplina,
       email: atleta.email ?? '',
       tessera_csain: atleta.tessera_csain ?? '',
+      fijlkam: atleta.fijlkam ?? false,
     })
     setDialogOpen(true)
   }
@@ -152,6 +184,7 @@ export default function AtletiClient({ atletiIniziali }: Props) {
       disciplina: data.disciplina,
       email: data.email || undefined,
       tessera_csain: data.tessera_csain || undefined,
+      fijlkam: data.fijlkam,
       note: undefined,
     }
 
@@ -339,6 +372,16 @@ export default function AtletiClient({ atletiIniziali }: Props) {
                           {atleta.disciplina}
                         </Badge>
                       )}
+                      {atleta.tessera_csain && (
+                        <Badge variant="outline" className="text-xs">
+                          CSAIN {atleta.tessera_csain}
+                        </Badge>
+                      )}
+                      {atleta.fijlkam && (
+                        <Badge variant="outline" className="text-xs text-blue-600 border-blue-300">
+                          FIJLKAM
+                        </Badge>
+                      )}
                     </div>
                   </div>
 
@@ -410,7 +453,32 @@ export default function AtletiClient({ atletiIniziali }: Props) {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label>Data di nascita *</Label>
-                <Input type="date" {...register('data_nascita')} />
+                <div className="grid grid-cols-3 gap-1.5">
+                  <Select value={dnGiorno} onValueChange={v => { setDnGiorno(v); handleDataNascita(v, dnMese, dnAnno) }}>
+                    <SelectTrigger><SelectValue placeholder="Gg" /></SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: giorniNelMese(dnMese, dnAnno) }, (_, i) => i + 1).map(g => (
+                        <SelectItem key={g} value={String(g)}>{g}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={dnMese} onValueChange={v => { setDnMese(v); handleDataNascita(dnGiorno, v, dnAnno) }}>
+                    <SelectTrigger><SelectValue placeholder="Mese" /></SelectTrigger>
+                    <SelectContent>
+                      {MESI.map((nome, i) => (
+                        <SelectItem key={i + 1} value={String(i + 1)}>{nome}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={dnAnno} onValueChange={v => { setDnAnno(v); handleDataNascita(dnGiorno, dnMese, v) }}>
+                    <SelectTrigger><SelectValue placeholder="Anno" /></SelectTrigger>
+                    <SelectContent>
+                      {ANNI.map(a => (
+                        <SelectItem key={a} value={String(a)}>{a}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
                 {errors.data_nascita && <p className="text-xs text-destructive">{errors.data_nascita.message}</p>}
               </div>
               <div className="space-y-1.5">
@@ -489,16 +557,35 @@ export default function AtletiClient({ atletiIniziali }: Props) {
               </Select>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label>Email atleta <span className="text-muted-foreground text-xs">(opzionale)</span></Label>
-                <Input type="email" placeholder="atleta@mail.it" {...register('email')} />
-                {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+            <div className="space-y-1.5">
+              <Label>Email atleta <span className="text-muted-foreground text-xs">(opzionale)</span></Label>
+              <Input type="email" placeholder="atleta@mail.it" {...register('email')} />
+              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+            </div>
+
+            {/* Tessere — almeno una obbligatoria */}
+            <div className="space-y-2 rounded-lg border p-3">
+              <p className="text-sm font-medium">Tesseramento <span className="text-destructive">*</span></p>
+              <p className="text-xs text-muted-foreground">Almeno uno dei due è obbligatorio</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label>N° tessera CSAIN</Label>
+                  <Input placeholder="CS-12345" {...register('tessera_csain')} />
+                </div>
+                <div className="flex flex-col justify-end">
+                  <label className="flex items-center gap-2 cursor-pointer select-none pb-1">
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-input accent-primary"
+                      {...register('fijlkam')}
+                    />
+                    <span className="text-sm font-medium">Tesserato FIJLKAM</span>
+                  </label>
+                </div>
               </div>
-              <div className="space-y-1.5">
-                <Label>N° tessera CSAIN <span className="text-muted-foreground text-xs">(opzionale)</span></Label>
-                <Input placeholder="CS-12345" {...register('tessera_csain')} />
-              </div>
+              {errors.tessera_csain && (
+                <p className="text-xs text-destructive">{errors.tessera_csain.message}</p>
+              )}
             </div>
 
             <DialogFooter className="pt-2">

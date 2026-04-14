@@ -51,6 +51,7 @@ export interface Atleta {
   email?: string
   note?: string
   tessera_csain?: string
+  fijlkam: boolean
   created_at: string
 }
 
