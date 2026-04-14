@@ -25,12 +25,19 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  const protectedPaths = ['/portale', '/admin']
-  const isProtected = protectedPaths.some(p => request.nextUrl.pathname.startsWith(p))
+  const { pathname } = request.nextUrl
+  const isProtected = pathname.startsWith('/portale') || pathname.startsWith('/admin')
+  const isAuthPage = pathname.startsWith('/login') || pathname.startsWith('/registrazione')
 
   if (isProtected && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
+    return NextResponse.redirect(url)
+  }
+
+  if (isAuthPage && user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/portale'
     return NextResponse.redirect(url)
   }
 
