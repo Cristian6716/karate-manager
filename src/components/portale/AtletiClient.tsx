@@ -82,7 +82,7 @@ const atletaSchema = z.object({
   peso: z.string().optional(),
   disciplina: z.enum(['kata', 'kumite', 'entrambi']).optional(),
   email: z.string().email('Email non valida').optional().or(z.literal('')),
-  tessera_csain: z.string().optional(),
+  tessera_csain: z.string().regex(/^\d*$/, 'Solo numeri').optional(),
   fijlkam: z.boolean(),
 }).refine(
   d => !!d.tessera_csain?.trim() || d.fijlkam,
@@ -450,53 +450,52 @@ export default function AtletiClient({ atletiIniziali }: Props) {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label>Data di nascita *</Label>
-                <div className="grid grid-cols-3 gap-1.5">
-                  <Select value={dnGiorno} onValueChange={v => { if (!v) return; setDnGiorno(v); handleDataNascita(v, dnMese, dnAnno) }}>
-                    <SelectTrigger><SelectValue placeholder="Gg" /></SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: giorniNelMese(dnMese, dnAnno) }, (_, i) => i + 1).map(g => (
-                        <SelectItem key={g} value={String(g)}>{g}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={dnMese} onValueChange={v => { if (!v) return; setDnMese(v); handleDataNascita(dnGiorno, v, dnAnno) }}>
-                    <SelectTrigger><SelectValue placeholder="Mese" /></SelectTrigger>
-                    <SelectContent>
-                      {MESI.map((nome, i) => (
-                        <SelectItem key={i + 1} value={String(i + 1)}>{nome}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={dnAnno} onValueChange={v => { if (!v) return; setDnAnno(v); handleDataNascita(dnGiorno, dnMese, v) }}>
-                    <SelectTrigger><SelectValue placeholder="Anno" /></SelectTrigger>
-                    <SelectContent>
-                      {ANNI.map(a => (
-                        <SelectItem key={a} value={String(a)}>{a}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                {errors.data_nascita && <p className="text-xs text-destructive">{errors.data_nascita.message}</p>}
-              </div>
-              <div className="space-y-1.5">
-                <Label>Sesso *</Label>
-                <Select
-                  value={watch('sesso') ?? ''}
-                  onValueChange={v => v && setValue('sesso', v as 'M' | 'F')}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Seleziona" />
-                  </SelectTrigger>
+            <div className="space-y-1.5">
+              <Label>Data di nascita *</Label>
+              <div className="grid grid-cols-3 gap-1.5">
+                <Select value={dnGiorno} onValueChange={v => { if (!v) return; setDnGiorno(v); handleDataNascita(v, dnMese, dnAnno) }}>
+                  <SelectTrigger><SelectValue placeholder="Gg" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="M">Maschile</SelectItem>
-                    <SelectItem value="F">Femminile</SelectItem>
+                    {Array.from({ length: giorniNelMese(dnMese, dnAnno) }, (_, i) => i + 1).map(g => (
+                      <SelectItem key={g} value={String(g)}>{g}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-                {errors.sesso && <p className="text-xs text-destructive">{errors.sesso.message}</p>}
+                <Select value={dnMese} onValueChange={v => { if (!v) return; setDnMese(v); handleDataNascita(dnGiorno, v, dnAnno) }}>
+                  <SelectTrigger><SelectValue placeholder="Mese" /></SelectTrigger>
+                  <SelectContent>
+                    {MESI.map((nome, i) => (
+                      <SelectItem key={i + 1} value={String(i + 1)}>{nome}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={dnAnno} onValueChange={v => { if (!v) return; setDnAnno(v); handleDataNascita(dnGiorno, dnMese, v) }}>
+                  <SelectTrigger><SelectValue placeholder="Anno" /></SelectTrigger>
+                  <SelectContent>
+                    {ANNI.map(a => (
+                      <SelectItem key={a} value={String(a)}>{a}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
+              {errors.data_nascita && <p className="text-xs text-destructive">{errors.data_nascita.message}</p>}
+            </div>
+
+            <div className="space-y-1.5">
+              <Label>Sesso *</Label>
+              <Select
+                value={watch('sesso') ?? ''}
+                onValueChange={v => v && setValue('sesso', v as 'M' | 'F')}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleziona" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="M">Maschile</SelectItem>
+                  <SelectItem value="F">Femminile</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.sesso && <p className="text-xs text-destructive">{errors.sesso.message}</p>}
             </div>
 
             <div className="space-y-1.5">
@@ -570,7 +569,7 @@ export default function AtletiClient({ atletiIniziali }: Props) {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label>N° tessera CSAIN</Label>
-                  <Input placeholder="CS-12345" {...register('tessera_csain')} />
+                  <Input placeholder="123456" inputMode="numeric" {...register('tessera_csain')} />
                 </div>
                 <div className="flex flex-col justify-end">
                   <label className="flex items-center gap-2 cursor-pointer select-none pb-1">
