@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 540" role="img" aria-label="CSAIN Lazio">
+  <title>CSAIN — Comitato Regionale Lazio</title>
+
+  <!-- Arc verde: 8:30 → 1:00 (sinistra, su, cima) sweep clockwise -->
+  <path d="M 61.6,325.5 A 195,195 0 0,1 347.5,106.1"
+        stroke="#008D36" stroke-width="20" stroke-linecap="round" fill="none"/>
+
+  <!-- Arc arancione: 1:00 → 2:30 (cima destra) -->
+  <path d="M 347.5,106.1 A 195,195 0 0,1 438.4,224.5"
+        stroke="#ECA514" stroke-width="13" stroke-linecap="round" fill="none"/>
+
+  <!-- Arc rosso: 3:30 → 8:00 (destra, sotto, sinistra-bassa) -->
+  <path d="M 438.4,325.5 A 195,195 0 0,1 81.1,372.5"
+        stroke="#CD201F" stroke-width="20" stroke-linecap="round" fill="none"/>
+
+  <!-- Arc blu scuro piccolo: 8:00 → 8:30 -->
+  <path d="M 81.1,372.5 A 195,195 0 0,1 61.6,325.5"
+        stroke="#16243E" stroke-width="11" stroke-linecap="round" fill="none"/>
+
+  <!-- Comitato Regionale -->
+  <text x="250" y="157"
+        text-anchor="middle"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="15"
+        fill="#16243E"
+        letter-spacing="0.8">Comitato Regionale</text>
+
+  <!-- LAZIO -->
+  <text x="250" y="183"
+        text-anchor="middle"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="24"
+        font-weight="bold"
+        fill="#16243E"
+        letter-spacing="4">LAZIO</text>
+
+  <!-- csain (testo principale) -->
+  <text x="250" y="322"
+        text-anchor="middle"
+        font-family="'Arial Black', 'Arial Bold', Arial, Helvetica, sans-serif"
+        font-size="128"
+        font-weight="900"
+        fill="#16243E">csain</text>
+
+  <!-- Piccola 'c' sopra la 'i' di csain -->
+  <text x="322" y="216"
+        text-anchor="middle"
+        font-family="'Arial Black', 'Arial Bold', Arial, Helvetica, sans-serif"
+        font-size="30"
+        font-weight="900"
+        fill="#16243E">c</text>
+
+  <!-- CENTRI SPORTIVI -->
+  <text x="250" y="365"
+        text-anchor="middle"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="18"
+        font-weight="bold"
+        fill="#16243E"
+        letter-spacing="1.5">CENTRI SPORTIVI</text>
+
+  <!-- AZIENDALI E INDUSTRIALI -->
+  <text x="250" y="390"
+        text-anchor="middle"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="18"
+        font-weight="bold"
+        fill="#16243E"
+        letter-spacing="1.5">AZIENDALI E INDUSTRIALI</text>
+
+  <!-- Simbolo registrato ® -->
+  <text x="447" y="465"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="17"
+        fill="#16243E">&#174;</text>
+</svg>
