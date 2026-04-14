@@ -69,6 +69,7 @@ const atletaSchema = z.object({
   peso: z.string().optional(),
   disciplina: z.enum(['kata', 'kumite', 'entrambi']).optional(),
   email: z.string().email('Email non valida').optional().or(z.literal('')),
+  tessera_csain: z.string().optional(),
 })
 
 type FormData = z.infer<typeof atletaSchema>
@@ -132,6 +133,7 @@ export default function AtletiClient({ atletiIniziali }: Props) {
       peso: atleta.peso?.toString() ?? '',
       disciplina: atleta.disciplina,
       email: atleta.email ?? '',
+      tessera_csain: atleta.tessera_csain ?? '',
     })
     setDialogOpen(true)
   }
@@ -149,6 +151,7 @@ export default function AtletiClient({ atletiIniziali }: Props) {
       peso: data.peso ? parseFloat(data.peso) : undefined,
       disciplina: data.disciplina,
       email: data.email || undefined,
+      tessera_csain: data.tessera_csain || undefined,
       note: undefined,
     }
 
@@ -486,10 +489,16 @@ export default function AtletiClient({ atletiIniziali }: Props) {
               </Select>
             </div>
 
-            <div className="space-y-1.5">
-              <Label>Email atleta <span className="text-muted-foreground text-xs">(opzionale)</span></Label>
-              <Input type="email" placeholder="atleta@mail.it" {...register('email')} />
-              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Email atleta <span className="text-muted-foreground text-xs">(opzionale)</span></Label>
+                <Input type="email" placeholder="atleta@mail.it" {...register('email')} />
+                {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+              </div>
+              <div className="space-y-1.5">
+                <Label>N° tessera CSAIN <span className="text-muted-foreground text-xs">(opzionale)</span></Label>
+                <Input placeholder="CS-12345" {...register('tessera_csain')} />
+              </div>
             </div>
 
             <DialogFooter className="pt-2">

@@ -50,6 +50,7 @@ export interface Atleta {
   disciplina?: Disciplina
   email?: string
   note?: string
+  tessera_csain?: string
   created_at: string
 }
 
