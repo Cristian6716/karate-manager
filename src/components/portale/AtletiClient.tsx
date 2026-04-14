@@ -83,7 +83,7 @@ const atletaSchema = z.object({
   disciplina: z.enum(['kata', 'kumite', 'entrambi']).optional(),
   email: z.string().email('Email non valida').optional().or(z.literal('')),
   tessera_csain: z.string().optional(),
-  fijlkam: z.boolean().default(false),
+  fijlkam: z.boolean(),
 }).refine(
   d => !!d.tessera_csain?.trim() || d.fijlkam,
   { message: 'Inserire almeno il numero tessera CSAIN oppure spuntare FIJLKAM', path: ['tessera_csain'] }
@@ -146,7 +146,7 @@ export default function AtletiClient({ atletiIniziali }: Props) {
   function openCreate() {
     setEditingAtleta(null)
     setDnGiorno(''); setDnMese(''); setDnAnno('')
-    reset({})
+    reset({ fijlkam: false })
     setDialogOpen(true)
   }
 
@@ -454,7 +454,7 @@ export default function AtletiClient({ atletiIniziali }: Props) {
               <div className="space-y-1.5">
                 <Label>Data di nascita *</Label>
                 <div className="grid grid-cols-3 gap-1.5">
-                  <Select value={dnGiorno} onValueChange={v => { setDnGiorno(v); handleDataNascita(v, dnMese, dnAnno) }}>
+                  <Select value={dnGiorno} onValueChange={v => { if (!v) return; setDnGiorno(v); handleDataNascita(v, dnMese, dnAnno) }}>
                     <SelectTrigger><SelectValue placeholder="Gg" /></SelectTrigger>
                     <SelectContent>
                       {Array.from({ length: giorniNelMese(dnMese, dnAnno) }, (_, i) => i + 1).map(g => (
@@ -462,7 +462,7 @@ export default function AtletiClient({ atletiIniziali }: Props) {
                       ))}
                     </SelectContent>
                   </Select>
-                  <Select value={dnMese} onValueChange={v => { setDnMese(v); handleDataNascita(dnGiorno, v, dnAnno) }}>
+                  <Select value={dnMese} onValueChange={v => { if (!v) return; setDnMese(v); handleDataNascita(dnGiorno, v, dnAnno) }}>
                     <SelectTrigger><SelectValue placeholder="Mese" /></SelectTrigger>
                     <SelectContent>
                       {MESI.map((nome, i) => (
@@ -470,7 +470,7 @@ export default function AtletiClient({ atletiIniziali }: Props) {
                       ))}
                     </SelectContent>
                   </Select>
-                  <Select value={dnAnno} onValueChange={v => { setDnAnno(v); handleDataNascita(dnGiorno, dnMese, v) }}>
+                  <Select value={dnAnno} onValueChange={v => { if (!v) return; setDnAnno(v); handleDataNascita(dnGiorno, dnMese, v) }}>
                     <SelectTrigger><SelectValue placeholder="Anno" /></SelectTrigger>
                     <SelectContent>
                       {ANNI.map(a => (
