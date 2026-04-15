@@ -61,7 +61,7 @@ export default async function PortaleDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-[#FBC115]">2026</p>
+            <p className="text-3xl font-bold text-[#FBC115]">2025-2026</p>
           </CardContent>
         </Card>
       </div>
