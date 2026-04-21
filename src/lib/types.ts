@@ -4,28 +4,32 @@ export type StatoEvento = 'bozza' | 'aperto' | 'chiuso' | 'completato'
 
 export const CINTURE = [
   'Bianca',
+  'Bianco-Gialla',
   'Gialla',
+  'Giallo-Arancione',
   'Arancione',
+  'Arancio-Verde',
   'Verde',
+  'Verde-Blu',
   'Blu',
+  'Blu-Marrone',
   'Marrone',
-  'Nera 1° Dan',
-  'Nera 2° Dan',
-  'Nera 3° Dan',
-  'Nera 4° Dan',
-  'Nera 5° Dan',
+  'Marrone-Nera',
+  'Nera',
 ] as const
 
 export const CATEGORIE = [
-  'Cuccioli (6-7 anni)',
-  'Pulcini (8-9 anni)',
-  'Esordienti (10-11 anni)',
-  'Ragazzi (12-13 anni)',
-  'Cadetti (14-15 anni)',
-  'Junior (16-17 anni)',
-  'Under 21',
-  'Senior',
-  'Master',
+  'Under 8',
+  'Under 10',
+  'Under 12',
+  'Under 14',
+  'Cadetti',
+  'Juniores',
+  'Seniores',
+  'Master A',
+  'Master B',
+  'Master C',
+  'Master D',
 ] as const
 
 export interface Sensei {

@@ -60,16 +60,18 @@ function giorniNelMese(mese: string, anno: string) {
 
 const CINTURA_COLORS: Record<string, string> = {
   'Bianca': 'bg-gray-100 text-gray-800 border border-gray-300',
+  'Bianco-Gialla': 'bg-yellow-50 text-yellow-700 border border-yellow-200',
   'Gialla': 'bg-yellow-100 text-yellow-800',
+  'Giallo-Arancione': 'bg-amber-100 text-amber-800',
   'Arancione': 'bg-orange-100 text-orange-800',
+  'Arancio-Verde': 'bg-lime-100 text-lime-800',
   'Verde': 'bg-green-100 text-green-800',
+  'Verde-Blu': 'bg-teal-100 text-teal-800',
   'Blu': 'bg-blue-100 text-blue-800',
+  'Blu-Marrone': 'bg-indigo-100 text-indigo-800',
   'Marrone': 'bg-amber-800 text-amber-50',
-  'Nera 1° Dan': 'bg-gray-900 text-white',
-  'Nera 2° Dan': 'bg-gray-900 text-white',
-  'Nera 3° Dan': 'bg-gray-900 text-white',
-  'Nera 4° Dan': 'bg-gray-900 text-white',
-  'Nera 5° Dan': 'bg-gray-900 text-white',
+  'Marrone-Nera': 'bg-stone-700 text-stone-50',
+  'Nera': 'bg-gray-900 text-white',
 }
 
 const atletaSchema = z.object({
@@ -439,14 +441,14 @@ export default function AtletiClient({ atletiIniziali }: Props) {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label>Nome *</Label>
-                <Input placeholder="Mario" {...register('nome')} />
-                {errors.nome && <p className="text-xs text-destructive">{errors.nome.message}</p>}
-              </div>
-              <div className="space-y-1.5">
                 <Label>Cognome *</Label>
                 <Input placeholder="Rossi" {...register('cognome')} />
                 {errors.cognome && <p className="text-xs text-destructive">{errors.cognome.message}</p>}
+              </div>
+              <div className="space-y-1.5">
+                <Label>Nome *</Label>
+                <Input placeholder="Mario" {...register('nome')} />
+                {errors.nome && <p className="text-xs text-destructive">{errors.nome.message}</p>}
               </div>
             </div>
 
@@ -554,12 +556,6 @@ export default function AtletiClient({ atletiIniziali }: Props) {
                   <SelectItem value="entrambi">Entrambi</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label>Email atleta <span className="text-muted-foreground text-xs">(opzionale)</span></Label>
-              <Input type="email" placeholder="atleta@mail.it" {...register('email')} />
-              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
             </div>
 
             {/* Tessere — almeno una obbligatoria */}
