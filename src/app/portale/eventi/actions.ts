@@ -11,7 +11,7 @@ export async function iscriviAtleti(eventoId: string, atletaIds: string[]) {
   const rows = atletaIds.map(atletaId => ({
     atleta_id: atletaId,
     evento_id: eventoId,
-    sensei_id: user.id,
+    societa_id: user.id,
   }))
 
   const { error } = await supabase
@@ -33,7 +33,7 @@ export async function rimuoviIscrizione(eventoId: string, atletaId: string) {
     .delete()
     .eq('atleta_id', atletaId)
     .eq('evento_id', eventoId)
-    .eq('sensei_id', user.id)
+    .eq('societa_id', user.id)
 
   if (error) return { error: error.message }
   revalidatePath('/portale/eventi')

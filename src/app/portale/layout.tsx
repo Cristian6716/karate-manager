@@ -8,17 +8,18 @@ export default async function PortaleLayout({ children }: { children: React.Reac
 
   if (!user) redirect('/login')
 
-  const { data: sensei } = await supabase
-    .from('sensei')
-    .select('nome, cognome')
+  const { data: societa } = await supabase
+    .from('societa')
+    .select('nome_societa, logo_url')
     .eq('id', user.id)
     .single()
 
   return (
     <div className="min-h-screen flex">
       <SidebarNav
-        userName={sensei ? `${sensei.nome} ${sensei.cognome}` : user.email ?? ''}
+        userName={societa?.nome_societa ?? user.email ?? ''}
         userEmail={user.email ?? ''}
+        logoUrl={societa?.logo_url ?? null}
       />
       <main className="flex-1 bg-background overflow-auto pt-14 md:pt-0">
         {children}

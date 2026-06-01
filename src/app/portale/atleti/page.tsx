@@ -8,7 +8,7 @@ export default async function AtletiPage() {
   const { data: atleti } = await supabase
     .from('atleti')
     .select('*')
-    .eq('sensei_id', user!.id)
+    .eq('societa_id', user!.id)
     .order('cognome')
 
   return <AtletiClient atletiIniziali={atleti ?? []} />

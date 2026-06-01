@@ -27,9 +27,10 @@ const navItems = [
 interface Props {
   userName: string
   userEmail: string
+  logoUrl?: string | null
 }
 
-export default function SidebarNav({ userName, userEmail }: Props) {
+export default function SidebarNav({ userName, userEmail, logoUrl }: Props) {
   const pathname = usePathname()
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -95,9 +96,14 @@ export default function SidebarNav({ userName, userEmail }: Props) {
       <div className="p-4 space-y-3">
         <div className="flex items-center gap-3">
           <Avatar className="w-9 h-9">
-            <AvatarFallback className="bg-sidebar-accent text-sidebar-accent-foreground text-xs font-bold">
-              {initials}
-            </AvatarFallback>
+            {logoUrl
+              ? <Image src={logoUrl} alt={userName} width={36} height={36} className="rounded-full object-cover bg-white" />
+              : (
+                <AvatarFallback className="bg-sidebar-accent text-sidebar-accent-foreground text-xs font-bold">
+                  {initials}
+                </AvatarFallback>
+              )
+            }
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium truncate">{userName}</p>
