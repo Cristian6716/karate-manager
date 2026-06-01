@@ -22,36 +22,49 @@ export const CINTURE = [
 ] as const
 
 // ============================================
-// CATEGORIE ETÀ FIJLKAM 2025-2026
+// CATEGORIE ETÀ CSAIn / FIJLKAM
+// Fonte: Comunicato e Regolamento 3° Grand Prix Karate Lazio (28-29 marzo 2026)
+// Range espressi in anni compiuti nell'anno solare di riferimento.
 // ============================================
 export const CATEGORIE_ETA = [
-  { id: 'bambini',      label: 'Bambini',      etaMin: 5,  etaMax: 7,  tipo: 'pre-agonistica' },
-  { id: 'fanciulli',    label: 'Fanciulli',    etaMin: 8,  etaMax: 9,  tipo: 'pre-agonistica' },
-  { id: 'ragazzi',      label: 'Ragazzi',      etaMin: 10, etaMax: 11, tipo: 'pre-agonistica' },
-  { id: 'esordienti_a', label: 'Esordienti A', etaMin: 12, etaMax: 13, tipo: 'agonistica' },
-  { id: 'esordienti_b', label: 'Esordienti B', etaMin: 14, etaMax: 15, tipo: 'agonistica' },
-  { id: 'cadetti',      label: 'Cadetti',      etaMin: 16, etaMax: 17, tipo: 'agonistica' },
-  { id: 'juniores',     label: 'Juniores',     etaMin: 18, etaMax: 20, tipo: 'agonistica' },
-  { id: 'seniores',     label: 'Seniores',     etaMin: 21, etaMax: 35, tipo: 'agonistica' },
-  { id: 'master',       label: 'Master',       etaMin: 36, etaMax: 99, tipo: 'agonistica' },
+  { id: 'bambini',    label: 'Bambini (U8)',    sigla: 'U8',  etaMin: 6,  etaMax: 7,  tipo: 'pre-agonistica', kumite: false },
+  { id: 'fanciulli',  label: 'Fanciulli (U10)', sigla: 'U10', etaMin: 8,  etaMax: 9,  tipo: 'pre-agonistica', kumite: true  },
+  { id: 'ragazzi',    label: 'Ragazzi (U12)',   sigla: 'U12', etaMin: 10, etaMax: 11, tipo: 'pre-agonistica', kumite: true  },
+  { id: 'esordienti', label: 'Esordienti (U14)',sigla: 'U14', etaMin: 12, etaMax: 13, tipo: 'agonistica',     kumite: true  },
+  { id: 'cadetti',    label: 'Cadetti',         sigla: 'U16', etaMin: 14, etaMax: 15, tipo: 'agonistica',     kumite: true  },
+  { id: 'junior',     label: 'Junior',          sigla: 'U18', etaMin: 16, etaMax: 17, tipo: 'agonistica',     kumite: true  },
+  { id: 'senior',     label: 'Senior',          sigla: 'SR',  etaMin: 18, etaMax: 35, tipo: 'agonistica',     kumite: true  },
+  { id: 'master_a',   label: 'Master A',        sigla: 'MA',  etaMin: 36, etaMax: 43, tipo: 'agonistica',     kumite: true  },
+  { id: 'master_b',   label: 'Master B',        sigla: 'MB',  etaMin: 44, etaMax: 50, tipo: 'agonistica',     kumite: true  },
+  { id: 'master_c',   label: 'Master C',        sigla: 'MC',  etaMin: 51, etaMax: 58, tipo: 'agonistica',     kumite: false },
+  { id: 'master_d',   label: 'Master D',        sigla: 'MD',  etaMin: 59, etaMax: 65, tipo: 'agonistica',     kumite: false },
+  { id: 'master_e',   label: 'Master E',        sigla: 'ME',  etaMin: 66, etaMax: 120,tipo: 'agonistica',     kumite: false },
 ] as const
 
 export type CategoriaEtaId = typeof CATEGORIE_ETA[number]['id']
 
 // ============================================
-// CATEGORIE PESO KUMITE FIJLKAM/WKF 2025-2026
-// (per ogni categoria età × sesso)
+// CATEGORIE PESO KUMITE
+// Fonte: Comunicato e Regolamento 3° Grand Prix Karate Lazio 2026
+// - Fanciulli/Ragazzi: pesi GCI/GCL Fijlkam (preagonistica)
+// - Esordienti: pesi Fijlkam (12-13 anni)
+// - Cadetti/Junior/Senior: pesi WKF
+// - Master A/B condividono le stesse fasce (Fijlkam Master)
+// - Master C/D/E non hanno kumite (solo kata)
 // ============================================
 export const CATEGORIE_PESO: Record<CategoriaEtaId, { M: string[]; F: string[] }> = {
-  bambini:      { M: [], F: [] },
-  fanciulli:    { M: [], F: [] },
-  ragazzi:      { M: [], F: [] },
-  esordienti_a: { M: ['-45','-50','-55','-61','-68','-75','+75'], F: ['-42','-47','-53','-60','+60'] },
-  esordienti_b: { M: ['-50','-56','-63','-70','-77','-84','+84'], F: ['-45','-50','-56','-62','+62'] },
-  cadetti:      { M: ['-52','-57','-63','-70','+70'],             F: ['-47','-54','+54'] },
-  juniores:     { M: ['-55','-61','-68','-76','+76'],             F: ['-48','-53','-59','+59'] },
-  seniores:     { M: ['-60','-67','-75','-84','+84'],             F: ['-50','-55','-61','-68','+68'] },
-  master:       { M: ['-67','-75','-84','+84'],                   F: ['-55','-61','+61'] },
+  bambini:    { M: [],                                       F: []                                       },
+  fanciulli:  { M: ['-27','-32','-37','+37'],                F: ['-27','-32','-37','+37']                },
+  ragazzi:    { M: ['-37','-42','-47','+47'],                F: ['-37','-42','-47','+47']                },
+  esordienti: { M: ['-40','-45','-50','-55','+55'],          F: ['-42','-47','-52','+52']                },
+  cadetti:    { M: ['-52','-57','-63','-70','+70'],          F: ['-47','-54','-61','+61']                },
+  junior:     { M: ['-55','-61','-68','-76','+76'],          F: ['-48','-53','-59','-66','+66']          },
+  senior:     { M: ['-60','-67','-75','-84','+84'],          F: ['-50','-55','-61','-68','+68']          },
+  master_a:   { M: ['-67','-75','+75'],                      F: ['-61','+61']                            },
+  master_b:   { M: ['-67','-75','+75'],                      F: ['-61','+61']                            },
+  master_c:   { M: [],                                       F: []                                       },
+  master_d:   { M: [],                                       F: []                                       },
+  master_e:   { M: [],                                       F: []                                       },
 }
 
 // ============================================

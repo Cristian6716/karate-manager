@@ -833,7 +833,9 @@ export default function AtletiClient({ atletiIniziali }: Props) {
                     </SelectContent>
                   </Select>
                   {pesiDisponibili.length === 0 && watchedCategoria && (
-                    <p className="text-xs text-muted-foreground">Le categorie pre-agonistiche non hanno fasce peso ufficiali.</p>
+                    <p className="text-xs text-muted-foreground">
+                      Categoria senza kumite (solo kata): fasce peso non previste.
+                    </p>
                   )}
                 </div>
 
