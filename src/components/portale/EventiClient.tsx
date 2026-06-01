@@ -30,7 +30,7 @@ const STATO_CONFIG = {
 
 interface Props {
   eventi: Evento[]
-  atleti: Pick<Atleta, 'id' | 'nome' | 'cognome' | 'cintura' | 'categoria' | 'disciplina'>[]
+  atleti: Pick<Atleta, 'id' | 'nome' | 'cognome' | 'cintura' | 'categoria_eta' | 'disciplina'>[]
   iscrizioniEsistenti: Pick<Iscrizione, 'atleta_id' | 'evento_id'>[]
 }
 
@@ -242,7 +242,7 @@ export default function EventiClient({ eventi, atleti, iscrizioniEsistenti }: Pr
                       <p className="font-medium text-sm">{atleta.cognome} {atleta.nome}</p>
                       <p className="text-xs text-muted-foreground">
                         {atleta.cintura}
-                        {atleta.categoria ? ` · ${atleta.categoria}` : ''}
+                        {atleta.categoria_eta ? ` · ${atleta.categoria_eta}` : ''}
                         {atleta.disciplina ? ` · ${atleta.disciplina}` : ''}
                       </p>
                     </div>

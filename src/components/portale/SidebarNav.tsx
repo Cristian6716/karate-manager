@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -12,6 +13,8 @@ import {
   Calendar,
   LayoutDashboard,
   LogOut,
+  Menu,
+  X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -24,11 +27,13 @@ const navItems = [
 interface Props {
   userName: string
   userEmail: string
+  logoUrl?: string | null
 }
 
-export default function SidebarNav({ userName, userEmail }: Props) {
+export default function SidebarNav({ userName, userEmail, logoUrl }: Props) {
   const pathname = usePathname()
   const router = useRouter()
+  const [open, setOpen] = useState(false)
 
   async function handleLogout() {
     const supabase = createClient()
@@ -44,7 +49,7 @@ export default function SidebarNav({ userName, userEmail }: Props) {
     .join('')
     .toUpperCase()
 
-  return (
+  const sidebarContent = (
     <aside className="w-64 min-h-screen bg-sidebar text-sidebar-foreground flex flex-col shadow-xl">
       {/* Logo */}
       <div className="p-5 flex items-center gap-3">
@@ -53,6 +58,14 @@ export default function SidebarNav({ userName, userEmail }: Props) {
           <p className="font-bold text-sm leading-tight">Karate Manager</p>
           <p className="text-xs text-sidebar-foreground/60 leading-tight">CSAIN Lazio</p>
         </div>
+        {/* Close button — mobile only */}
+        <button
+          className="ml-auto md:hidden text-sidebar-foreground/70 hover:text-sidebar-foreground"
+          onClick={() => setOpen(false)}
+          aria-label="Chiudi menu"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       <Separator className="bg-sidebar-border" />
@@ -62,7 +75,7 @@ export default function SidebarNav({ userName, userEmail }: Props) {
         {navItems.map(({ href, label, icon: Icon, exact }) => {
           const active = exact ? pathname === href : pathname.startsWith(href)
           return (
-            <Link key={href} href={href}>
+            <Link key={href} href={href} onClick={() => setOpen(false)}>
               <div className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer',
                 active
@@ -83,9 +96,14 @@ export default function SidebarNav({ userName, userEmail }: Props) {
       <div className="p-4 space-y-3">
         <div className="flex items-center gap-3">
           <Avatar className="w-9 h-9">
-            <AvatarFallback className="bg-sidebar-accent text-sidebar-accent-foreground text-xs font-bold">
-              {initials}
-            </AvatarFallback>
+            {logoUrl
+              ? <Image src={logoUrl} alt={userName} width={36} height={36} className="rounded-full object-cover bg-white" />
+              : (
+                <AvatarFallback className="bg-sidebar-accent text-sidebar-accent-foreground text-xs font-bold">
+                  {initials}
+                </AvatarFallback>
+              )
+            }
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium truncate">{userName}</p>
@@ -103,5 +121,46 @@ export default function SidebarNav({ userName, userEmail }: Props) {
         </Button>
       </div>
     </aside>
+  )
+
+  return (
+    <>
+      {/* ── Desktop: sidebar permanente ── */}
+      <div className="hidden md:flex">
+        {sidebarContent}
+      </div>
+
+      {/* ── Mobile: top bar + drawer ── */}
+      <div className="md:hidden">
+        {/* Top bar */}
+        <header className="fixed top-0 left-0 right-0 z-40 h-14 bg-sidebar text-sidebar-foreground flex items-center px-4 gap-3 shadow-md">
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Apri menu"
+            className="text-sidebar-foreground/80 hover:text-sidebar-foreground"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+          <Image src="/csain-logo.svg" alt="CSAIN Lazio" width={28} height={28} className="rounded-full bg-white p-0.5 shrink-0" />
+          <p className="font-bold text-sm">Karate Manager</p>
+        </header>
+
+        {/* Overlay */}
+        {open && (
+          <div
+            className="fixed inset-0 z-40 bg-black/50"
+            onClick={() => setOpen(false)}
+          />
+        )}
+
+        {/* Drawer */}
+        <div className={cn(
+          'fixed top-0 left-0 h-full z-50 transition-transform duration-300',
+          open ? 'translate-x-0' : '-translate-x-full'
+        )}>
+          {sidebarContent}
+        </div>
+      </div>
+    </>
   )
 }

@@ -9,10 +9,10 @@ export default async function PortaleDashboard() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const [{ count: totaleAtleti }, { data: eventi }, { data: sensei }] = await Promise.all([
-    supabase.from('atleti').select('*', { count: 'exact', head: true }).eq('sensei_id', user!.id),
+  const [{ count: totaleAtleti }, { data: eventi }, { data: societa }] = await Promise.all([
+    supabase.from('atleti').select('*', { count: 'exact', head: true }).eq('societa_id', user!.id),
     supabase.from('eventi').select('*').eq('stato', 'aperto').order('data_evento').limit(3),
-    supabase.from('sensei').select('nome, cognome, associazione').eq('id', user!.id).single(),
+    supabase.from('societa').select('nome_societa, fed_eps, presidente').eq('id', user!.id).single(),
   ])
 
   return (
@@ -20,10 +20,13 @@ export default async function PortaleDashboard() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-foreground">
-          Benvenuto, {sensei?.nome} {sensei?.cognome}
+          Benvenuti, {societa?.nome_societa ?? 'Società'}
         </h1>
-        {sensei?.associazione && (
-          <p className="text-muted-foreground mt-1">{sensei.associazione}</p>
+        {societa?.fed_eps && (
+          <p className="text-muted-foreground mt-1">
+            {societa.fed_eps}
+            {societa?.presidente ? ` · ${societa.presidente}` : ''}
+          </p>
         )}
       </div>
 
@@ -61,7 +64,7 @@ export default async function PortaleDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-[#FBC115]">2026</p>
+            <p className="text-3xl font-bold text-[#FBC115]">2025-2026</p>
           </CardContent>
         </Card>
       </div>
